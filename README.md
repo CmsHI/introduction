@@ -57,7 +57,7 @@ Here root is telling us it's opened the file, and inside it sees a TTree called 
 ```
 root [2] TBrowser b
 ```
-![Image of TBrowser](http://web.mit.edu/mithig/tutorial/http://web.mit.edu/mithig/samples/g.pp-photonHLTFilter-v0-HiForest-tutorial.root)
+![Image of TBrowser](http://web.mit.edu/mithig/tutorial/tbrowser-example.png)
 
 
 
