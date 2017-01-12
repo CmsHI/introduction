@@ -1,0 +1,20 @@
+Rint.History: $(HOME)/.root_history
+Rint.HistorySize: 1000000
+Rint.HistorySave: 900000
+Browser.Name:                TRootBrowserLite
+# GUI specific settings
+
+Gui.DefaultFont:          -*-helvetica-medium-r-*-*-22-*-*-*-*-*-iso8859-1 [Global]
+Gui.MenuFont:             -*-helvetica-medium-r-*-*-22-*-*-*-*-*-iso8859-1 [Global]
+Gui.MenuHiFont:           -*-helvetica-bold-r-*-*-22-*-*-*-*-*-iso8859-1 [Global]
+Gui.DocFixedFont:         -*-courier-medium-r-*-*-22-*-*-*-*-*-iso8859-1 [Global]
+Gui.DocPropFont:          -*-helvetica-medium-r-*-*-22-*-*-*-*-*-iso8859-1 [Global]
+Gui.IconFont:             -*-helvetica-medium-r-*-*-20-*-*-*-*-*-iso8859-1 [Global]
+Gui.StatusFont:           -*-helvetica-medium-r-*-*-20-*-*-*-*-*-iso8859-1 [Global]
+Gui.DefaultFont:          -*-helvetica-medium-r-*-*-22-*-*-*-*-*-iso8859-1 [Global]
+Gui.MenuFont:             -*-helvetica-medium-r-*-*-22-*-*-*-*-*-iso8859-1 [Global]
+Gui.MenuHiFont:           -*-helvetica-bold-r-*-*-22-*-*-*-*-*-iso8859-1 [Global]
+Gui.DocFixedFont:         -*-courier-medium-r-*-*-22-*-*-*-*-*-iso8859-1 [Global]
+Gui.DocPropFont:          -*-helvetica-medium-r-*-*-22-*-*-*-*-*-iso8859-1 [Global]
+Gui.IconFont:             -*-helvetica-medium-r-*-*-20-*-*-*-*-*-iso8859-1 [Global]
+Gui.StatusFont:           -*-helvetica-medium-r-*-*-20-*-*-*-*-*-iso8859-1 [Global]
