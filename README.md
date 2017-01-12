@@ -38,5 +38,26 @@ This means root works and you can issue commands to the root interpreter line by
 ```
 root [0] .q
 ```
+Let's grab a sample input file of real collision data and open it in ROOT, and use this to go over some of the ways we can use the root interpreter. 
+```bash
+wget http://web.mit.edu/mithig/samples/g.pp-photonHLTFilter-v0-HiForest-tutorial.root
+root -l g.pp-photonHLTFilter-v0-HiForest-tutorial.root
+```
+Next we can type .ls to see something like this:
+```
+root [0] 
+Attaching file g.pp-photonHLTFilter-v0-HiForest-tutorial.root as _file0...
+(TFile *) 0x2300530
+root [1] .ls
+TFile**		g.pp-photonHLTFilter-v0-HiForest-tutorial.root	
+ TFile*		g.pp-photonHLTFilter-v0-HiForest-tutorial.root	
+  KEY: TTree	ztree;	Jet track tree
+```
+Here root is telling us it's opened the file, and inside it sees a TTree called ztree. We can open a TBrowser to see what's inside:
+```
+root [2] TBrowser b
+```
+![Image of TBrowser](http://web.mit.edu/mithig/tutorial/http://web.mit.edu/mithig/samples/g.pp-photonHLTFilter-v0-HiForest-tutorial.root)
+
 
 
