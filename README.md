@@ -149,3 +149,15 @@ Info in <TTreePlayer::MakeClass>: Files: analysis.h and analysis.C generated fro
 root [2]
 ```
 
+ROOT created two files for us, analysis.h and analysis.C , which we can start from to analyze the data in the root flie. The code in analysis.h is what makes reads in the root file and sets the variables, we can treat this as a black box for now but feel free to try to understand what it does and ask questions about what is happening under the hood. 
+
+The first thing we'll do is modify the analysis.C so that we can compile it into an executable. All we need to add is a main() function to satisfy the compiler. So add the following lines to the end of analysis.C :
+
+```c++
+int main(int argc, char *argv[])
+{
+   return 0;
+}
+
+```
+
