@@ -105,7 +105,47 @@ jetphi[i]         = the azimuthal angle of the i'th jet
 
 While the names and types of variables you'll encounter in data will be different than these, there idea that certain variables describe a collision, and other variables describe objects within that collision is a general concept. 
 
+## Making quick plots from ROOT
+Open the file described above and the TBrowser until you get to the same image as shown above. If you just double click on the variable called nTrk you should see an image like the one below, this shows us the distribution of the number of charged particle per collision, for all collisions in the file that we opened. Try right clicking on the plot and changing the y-axis to log scale and discover what other tools are available to us for manipulating plots. 
+![Image of TBrowser](http://web.mit.edu/mithig/tutorial/nTrk-example.png)
+Next double click on the variable called trkPt and you should see a new plot appear. This plot will be the distribution of the transverse momentum of all reconstructed charged particles, in all collisions in our file. You'll notice that due to the tail of this distribution most points are close to either the X or Y axis. Suppose we want to take a closer look at the distribution of just particles having trkPt < 10 GeV, if we just zoom in on the axis we'll see 3 points due to the binning. To select just the particles having a trkPt < 10 GeV we go to the root command line and type the following:
+```
+root [3] ztree->Draw("trkPt","trkPt<10")
+```
+You should have seen something like this in the tutorial on the root website, but let's go over that this line does in detail. Recall when we did .ls , ROOT told us it sees a TTree called ztree. 
+```
+root [1] .ls
+TFile**		g.pp-photonHLTFilter-v0-HiForest-tutorial.root	
+ TFile*		g.pp-photonHLTFilter-v0-HiForest-tutorial.root	
+  KEY: TTree	ztree;	Jet track tree
+```
+In C++ terms ztree is a pointer of type TTree, and thus we can use all the functions a TTree has defined. You can see the full list of what TTree's can do here: https://root.cern.ch/doc/v608/classTTree.html . Usually google-ing the class name will lead you to the documentation, although the results surprise you from time to time like when you try to google for TAxis :) 
+
+So our command takes the TTree pointer ztree, and calls the Draw function with two parameters, the first being what we're drawing ```"trkPt"``` and the second being the cut we are applying ```"trkPt<10"``` . What should the command be if we want to see the azimuthal distribution of charged particles having less than 10 GeV of transverse momentum?
+
+The ROOT command line can also show you both what functions a class has available and what parameters they expect as input by typing the ClassName::FunctionName( and pressing tab, for example below I pressed tab after typing ```TTree::Draw(``` :
+```
+root [8] TTree::Draw(
+Long64_t Draw(const char* varexp, const TCut& selection, Option_t* option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0)
+Long64_t Draw(const char* varexp, const char* selection, Option_t* option = "", Long64_t nentries = kMaxEntries, Long64_t firstentry = 0) 	// *MENU*
+void Draw(Option_t* opt)
+void Draw(Option_t* option = "")
+root [8] TTree::Draw(
+```
+You see that the Draw command can take up to 5 arguments but only the first is required, the rest being optional. You can do surprisingly many things from just carefully crafted Draw commands. Try to see if you can plot the difference in the phi coordinate of the first photon (index 0 in the array) and all the charged particles in each event, with the result plotted between 0 and pi (since the largest angle between two vectors is pi).
 
 
+## Analysis code with ROOT
+While analyzing data line by line with Draw commands from the ROOT terminal can get you pretty far, there is a limit to what you can achieve. At some point it's necessary to write code that can do arbitrarily complex logic and cuts. There's quite a few concepts and code that needs to be written to analyze a root file from scratch, however here we're going to take a shortcut and have ROOT auto-generate that for us. At some point it's useful to understand how that works as well but for now we can just use it as a black box that lets us use variables from the file in the code. So to generate the code we open the root file again and use ```ztree->MakeClass``` function:
 
+```
+root g.pp-photonHLTFilter-v0-HiForest-tutorial.root
+root [0] 
+Attaching file g.pp-photonHLTFilter-v0-HiForest-tutorial.root as _file0...
+(TFile *) 0x268a3e0
+root [1] ztree->MakeClass("analysis")
+Info in <TTreePlayer::MakeClass>: Files: analysis.h and analysis.C generated from TTree: ztree
+(Int_t) 0
+root [2]
+```
 
