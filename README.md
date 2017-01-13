@@ -108,9 +108,9 @@ While the names and types of variables you'll encounter in data will be differen
 ## Making quick plots from ROOT
 Open the file described above and the TBrowser until you get to the same image as shown above. If you just double click on the variable called nTrk you should see an image like the one below, this shows us the distribution of the number of charged particle per collision, for all collisions in the file that we opened. Try right clicking on the plot and changing the y-axis to log scale and discover what other tools are available to us for manipulating plots. 
 ![Image of TBrowser](http://web.mit.edu/mithig/tutorial/nTrk-example.png)
-Next double click on the variable called trkPt and you should see a new plot appear. This plot will be the distribution of the transverse momentum of all reconstructed charged particles, in all collisions in our file. You'll notice that due to the tail of this distribution most points are close to either the X or Y axis. Suppose we want to take a closer look at the distribution of just particles having trkPt < 10 GeV, if we just zoom in on the axis we'll see 3 points due to the binning. To select just the particles having a trkPt < 10 GeV we go to the root command line and type the following:
+Next double click on the variable called trkPt and you should see a new plot appear. This plot will be the distribution of the transverse momentum of all reconstructed charged particles, in all collisions in our file. You'll notice that due to the tail of this distribution most points are close to either the X or Y axis. Suppose we want to take a closer look at the distribution of just particles having trkPt < 10 GeV _only_ in events having at least 20 particles. To make this selection we go to the root command line and type the following:
 ```
-root [3] ztree->Draw("trkPt","trkPt<10")
+root [3] ztree->Draw("trkPt","trkPt<10 && nTrk>20")
 ```
 You should have seen something like this in the tutorial on the root website, but let's go over that this line does in detail. Recall when we did .ls , ROOT told us it sees a TTree called ztree. 
 ```
@@ -121,7 +121,7 @@ TFile**		g.pp-photonHLTFilter-v0-HiForest-tutorial.root
 ```
 In C++ terms ztree is a pointer of type TTree, and thus we can use all the functions a TTree has defined. You can see the full list of what TTree's can do here: https://root.cern.ch/doc/v608/classTTree.html . Usually google-ing the class name will lead you to the documentation, although the results surprise you from time to time like when you try to google for TAxis :) 
 
-So our command takes the TTree pointer ztree, and calls the Draw function with two parameters, the first being what we're drawing ```"trkPt"``` and the second being the cut we are applying ```"trkPt<10"``` . What should the command be if we want to see the azimuthal distribution of charged particles having less than 10 GeV of transverse momentum?
+So our command takes the TTree pointer ztree, and calls the Draw function with two parameters, the first being what we're drawing ```"trkPt"``` and the second being the cuts we are applying ```"trkPt<10 && nTrk>20"``` . In this case we are applying one cut on tracks, requiring their momentum to be greater than 10 GeV, and we're applying a second cut on collision events requiring they have more than 20.  What should the command be if we want to see the azimuthal distribution of charged particles having less than 10 GeV of transverse momentum?
 
 The ROOT command line can also show you both what functions a class has available and what parameters they expect as input by typing the ClassName::FunctionName( and pressing tab, for example below I pressed tab after typing ```TTree::Draw(``` :
 ```
@@ -158,6 +158,155 @@ int main(int argc, char *argv[])
 {
    return 0;
 }
-
 ```
+
+New we can compile and run the code from the terminal:
+
+```bash
+g++ analysis.C $(root-config --cflags --libs) -Werror -Wall -O2 -o "analysis.exe"
+./analysis.exe
+```
+
+At the moment our analysis code didn't do anything, it didn't even open the data file, however if it was able to compile and run it means at that all the root libraries are properly set and configured, which is a good place to start from. Let's also go over what the g++ command does on the first line. It takes the .C file containing the analysis code as input ```analysis.C``` . ```$(root-config --cflags --libs)``` tells the compiler where to find all the ROOT libraries. ```-Werror -Wall``` tells the compiler to treat warnings as errors, this is optional for getting code to _run_ however I recommend keeping it on because it forces you to have cleaner code and helps you find bugs in your code that don't cause the analysis to crash but give incorrect results. ```O2``` is some optimization flag, and lastly ```-o analysis.exe``` is the output executable that we will run to do our analysis. 
+
+Let's now add a few more lines to analysis.C so that it reads the data and runs the one function that was auto-generated, Loop. Modify the main function in analysis.C so that it looks like this: 
+```c++
+int main(int argc, char *argv[])
+{
+  analysis * ana = new analysis();
+  ana->Loop();
+  return 0;
+}
+```
+Compile and run:
+```bash
+g++ analysis.C $(root-config --cflags --libs) -Werror -Wall -O2 -o "analysis.exe"
+./analysis.exe
+```
+
+The code still hasn't produced any output, however this time it actually read in the input file and looped through every collision. At this point it's good to review what is a _constructor_ , an _instance_ and a _pointer_ in C++ to understand what happens in the first line ```analysis * ana = new analysis();``` . That's where the file is read in the function ```analysis::analysis(TTree *tree)``` defined in analysis.h . The next line calls the Loop function defined in analysis.C which reads each collision in order in the file. The part of the code which loops through all collisions is the following: 
+
+```c++
+   for (Long64_t jentry=0; jentry<nentries;jentry++) {
+      Long64_t ientry = LoadTree(jentry);
+      if (ientry < 0) break;
+      nb = fChain->GetEntry(jentry);   nbytes += nb;
+      // if (Cut(ientry) < 0) continue;                                                              
+   }
+```
+
+To understand this code you should be familiar with _for_ loops and _if_ statements . The line ```Long64_t ientry = fChain->GetEntry(jentry);``` is what loads the jentry'th collision into memory. The way the TTree data structures work in this code is the following, we have the same variables described above, ex. nTrk and trkPt, set _for a specific collision_ . When you call ```GetEntry(0)``` it sets the nTrk variable to the number for the first collision, it sets the trkPt array to the momentum of the particles in that collision, and so fourth. When you call ```GetEntry(1)``` , it changes the values of all the variables to what they are in the second collision, and so on. 
+
+Try to understand how collisions are stored in TTrees here, how we pull all the information one collision event at a time, and how you don't see what's happening in all collisions simulataneously. 
+
+Let's make the same plot we did with the TTree::Draw command further up, ```ztree->Draw("trkPt","trkPt<10 && nTrk>20")```, to understand how cuts can be applied when looping through events and looping through tracks. 
+
+First we will introduce the cut on the total number of particles in the event by adding a _continue_ statement within the for loop after we do GetEntry to load the collision information.
+
+```c++
+   for (Long64_t jentry=0; jentry<nentries;jentry++) {
+      Long64_t ientry = LoadTree(jentry);
+      if (ientry < 0) break;
+      nb = fChain->GetEntry(jentry);   nbytes += nb;
+      if( nTrk < 21 ) continue;
+   }
+```
+
+Next we'll loop through each of the charged particles within each event. Since there are a total of nTrk charged particles in the event, we will iterate from 0 to nTrk-1 in our trk arrays and check if each track has less than 10 GeV momentum.
+
+```c++
+   for (Long64_t jentry=0; jentry<nentries;jentry++) {
+      Long64_t ientry = LoadTree(jentry);
+      if (ientry < 0) break;
+      nb = fChain->GetEntry(jentry);   nbytes += nb;
+      if( nTrk < 21 ) continue;
+      for(int itrk = 0 ; itrk < nTrk ; itrk++) {
+        if(trkPt[itrk]>10) continue;
+
+      }
+   }
+```
+
+Lastly we are going to create a histogram, fill in the track momentum for the tracks which pass both of our selections there, and save that histogram into an output file. The code inside will look like this: 
+
+```c++
+   if (fChain == 0) return;
+   
+   TFile * outputfile = new TFile("outfilename.root","recreate");
+   TH1D * htrkPt = new TH1D("htrkPt","title;xaxis title;yaxis title",100,0.2,10.8);
+
+   Long64_t nentries = fChain->GetEntriesFast();
+
+   Long64_t nbytes = 0, nb = 0;
+   for (Long64_t jentry=0; jentry<nentries;jentry++) {
+      Long64_t ientry = LoadTree(jentry);
+      if (ientry < 0) break;
+      nb = fChain->GetEntry(jentry);   nbytes += nb;
+      if( nTrk < 21 ) continue;
+      for(int itrk = 0 ; itrk < nTrk ; itrk++) {
+        if(trkPt[itrk]>10) continue;
+        htrkPt->Fill(trkPt[itrk]);
+      }
+   }
+   
+   outputfile->Write();
+   outputfile->Close();
+```
+
+The lines we added are:
+
+```c++
+TFile * outputfile = new TFile("outfilename.root","recreate");
+``` 
+This creates the output file where our results will be stored.
+
+```c++
+TH1D * htrkPt = new TH1D("htrkPt","title;xaxis title;yaxis title",100,0.2,10.8);
+``` 
+This creates a TH1D histogram object. The first parameter "htrkPt" is the internal name of the histogram, the second parameter defines the visible plot title, x and y axis titles, the third parameter is the number of bins, the 4th and 5th parameters are the min and max x-values of this histogram.
+
+
+```c++
+htrkPt->Fill(trkPt[itrk]);
+``` 
+This "fills" the histogram, which means it adds 1 to the bin corresponding to this track's momentum. The information this histogram will tell us after it's been filled is the total number of tracks that fall in each of its bins. 
+
+```c++
+   outputfile->Write();
+   outputfile->Close();
+```
+Lastly these lines write the histogram we have filled to the output file and close the file. 
+
+By looking at where the histogram is filled we can see how each of the cuts is applied. Here it's important to understand what the _continue_ statement of C++ does: in a for loop it will skip everything below it and go to the next iteration of the for loop. So in ```if( nTrk < 21 ) continue;``` , whenever nTrk is less then 21, the continue statement is executed, and the code below it is skipped, so the histogram is never filled for events having fewer than 21 charged particles. Likewise in the track loop ```if(trkPt[itrk]>10) continue;``` , whenever the i'th track has more than 10 GeV trkPt the continue statement is executed and skips to the next track in the track for loop not filling the histogram for those tracks. 
+
+With these modifications let's compile, run the code, and open the file the code creates and plot the histogram within it:
+```bash
+g++ analysis.C $(root-config --cflags --libs) -Werror -Wall -O2 -o "analysis.exe"
+./analysis.exe
+root -l outfilename.root
+root [0] 
+Attaching file outfilename.root as _file0...
+(TFile *) 0x32c8cd0
+root [1] .ls
+TFile**		outfilename.root	
+ TFile*		outfilename.root	
+  KEY: TH1D	htrkPt;1	title
+root [2] htrkPt->Draw("pe")
+Info in <TCanvas::MakeDefCanvas>:  created default TCanvas with name c1
+root [3] 
+```
+
+How does this histogram compare to the one created by the Draw command from before? 
+
+## Homework
+
+Try to do some of the following tasks which are useful for research both in this group and elsewhere.
+
+### Physics: 
+1. Modify the code we have so far to produce a histogram of the average track momentum distribution that you would see in a typical collision that has at least 20 particles. This is a physically meaningful observable, so it should not depend on any arbitrary decisions we make like the number of events that are in the file or the choice of binning for the histogram.  
+2. Create a new histogram that shows how the mean value of the track momentum (mean of trkPt) changes as a function of the number of tracks in the event. 
+
+### Programming: 
+1. Modify the code we wrote so that the cuts we made are not hard-coded in analysis.C , but can be passed in as arguments when we run the code from the terminal. I.e. running ```./analysis.exe 20 10``` will apply ```nTrk>20``` and ```trkPt<10``` cuts , and changing those cuts just requires changing the parameters you run with, ```./analysis.exe 30 30``` for example. 
+2. Start using github if you haven't already. Make an account, set up your ssh keys so you can push and pull, fork this repository and start committing and saving your changes. 
 
