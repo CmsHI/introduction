@@ -124,7 +124,7 @@ jeteta[i]         = the pseudorapidity of the i'th jet
 jetphi[i]         = the azimuthal angle of the i'th jet
 ```
 
-While the names and types of variables you'll encounter in data will be different than these, there idea that certain variables describe a collision, and other variables describe objects within that collision is a general concept. 
+While the names and types of variables you'll encounter in data will be different than these, the idea that certain variables describe a collision, and other variables describe objects within that collision is a general concept. 
 
 # Making quick plots from ROOT
 Open the file described above and the TBrowser until you get to the same image as shown above. If you just double click on the variable called nTrk you should see an image like the one below, this shows us the distribution of the number of charged particle per collision, for all collisions in the file that we opened. Try right clicking on the plot and changing the y-axis to log scale and discover what other tools are available to us for manipulating plots. 
