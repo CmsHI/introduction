@@ -51,6 +51,14 @@ This means root works and you can issue commands to the root interpreter line by
 root [0] .q
 ```
 
+## Clone this repository
+
+Before going to the next step clone this repository to your computer and we'll use it as our working directory since it has some settings inside which make nicer looking plots.
+```bash
+git clone https://github.com/velicanu/introduction.git
+cd introduction
+```
+
 #  Looking inside a Data file
 Let's grab a sample input file of real collision data and open it in ROOT, and use this to go over some of the ways we can use the root interpreter. 
 ```bash
