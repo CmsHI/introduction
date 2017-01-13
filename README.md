@@ -108,6 +108,7 @@ While the names and types of variables you'll encounter in data will be differen
 ## Making quick plots from ROOT
 Open the file described above and the TBrowser until you get to the same image as shown above. If you just double click on the variable called nTrk you should see an image like the one below, this shows us the distribution of the number of charged particle per collision, for all collisions in the file that we opened. Try right clicking on the plot and changing the y-axis to log scale and discover what other tools are available to us for manipulating plots. 
 ![Image of TBrowser](http://web.mit.edu/mithig/tutorial/nTrk-example.png)
+
 Next double click on the variable called trkPt and you should see a new plot appear. This plot will be the distribution of the transverse momentum of all reconstructed charged particles, in all collisions in our file. You'll notice that due to the tail of this distribution most points are close to either the X or Y axis. Suppose we want to take a closer look at the distribution of just particles having trkPt < 10 GeV _only_ in events having at least 20 particles. To make this selection we go to the root command line and type the following:
 ```
 root [3] ztree->Draw("trkPt","trkPt<10 && nTrk>20")
