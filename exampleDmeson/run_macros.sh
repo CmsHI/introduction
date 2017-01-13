@@ -3,12 +3,18 @@
 DO_SAVEHIST=1
 DO_FIT=1
 
-#
+# get the input file if needed
+if [ ! -e ntD_pp_HeavyFlavor_goldenjson.root ]
+then
+    curl -O http://web.mit.edu/mithig/samples/ntD_pp_HeavyFlavor_goldenjson.root
+fi
+
 
 ## svmithi02 @ lxplus 
 #INPUTDATA="/data/wangj/TutorialsSamples/rootTutorial/ntD_pp_HeavyFlavor_goldenjson.root"
 ## hidsk0001 @ cgate
-INPUTDATA="/export/d00/scratch/jwang/TutorialsSamples/ntD_pp_HeavyFlavor_goldenjson.root"
+#INPUTDATA="/export/d00/scratch/jwang/TutorialsSamples/ntD_pp_HeavyFlavor_goldenjson.root"
+INPUTDATA="ntD_pp_HeavyFlavor_goldenjson.root"
 
 CUTTRIGGER="((HLT_DmesonPPTrackingGlobal_Dpt15_v1&&Dpt>20&&Dpt<40)||(HLT_DmesonPPTrackingGlobal_Dpt30_v1&&Dpt>40&&Dpt<60)||(HLT_DmesonPPTrackingGlobal_Dpt50_v1&&Dpt>60))"
 CUT="Dtrk1Pt>2.0&&Dtrk2Pt>2.0&&(DsvpvDistance/DsvpvDisErr)>3.5&&Dchi2cl>0.05&&Dalpha<0.12&&Dpt>20.&&Dy>-1&&Dy<1"
