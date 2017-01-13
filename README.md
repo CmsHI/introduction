@@ -10,6 +10,7 @@ A tutorial for getting started with particle physics research and ROOT.
 	- [Information about jets](#)
 - [Making quick plots from ROOT](#)
 - [Analysis code with ROOT](#)
+- [Finding the D meson](#)
 - [Homework](#)
 	- [Physics:](#)
 	- [Programming:](#)
