@@ -89,7 +89,7 @@ Each collision will have some global properties that can be represented by a sin
 ```
 isPP              = type int , 0 if PbPb collision data, 1 if pp 
 run, event, lumi  = a set of numbers describing when the event was recorded, the combination should be unique in data
-vz                = the z possition of the collision along the beampipe, with 0 being the center of the detector
+vz                = the z position of the collision along the beampipe, with 0 being the center of the detector
 ```
 
 ## Information about charged particles
