@@ -2,6 +2,7 @@ A tutorial for getting started with particle physics research and ROOT.
 
 - [Install ROOT:](#)
 - [Running ROOT:](#)
+	- [Clone this repository](#)
 - [Looking inside a Data file](#)
 	- [Global event variables](#)
 	- [Information about charged particles](#)
