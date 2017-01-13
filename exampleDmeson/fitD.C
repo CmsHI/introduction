@@ -15,7 +15,7 @@ void fitD(TString inputhist)
   TH1D* h = (TH1D*)inf->Get("h");
 
   // Fit
-  TF1* f = new TF1("f","[0]*([7]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[7])*Gaus(x,[1],[8])/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*x*x+[6]*x*x*x",1.7,2.0);
+  TF1* f = new TF1("f","[0]*([7]*exp(-0.5*((x-[1])/[2])**2)/(sqrt(2*3.14159)*[2])+(1-[7])*exp(-0.5*((x-[1])/[8])**2)/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*x*x+[6]*x*x*x",1.7,2.0);
 
   f->SetParLimits(2,0.005,0.05);
   f->SetParLimits(8,0.001,0.05);
@@ -36,7 +36,7 @@ void fitD(TString inputhist)
   background->SetLineColor(4);
   background->SetLineStyle(2);
 
-  TF1* mass = new TF1("mass","[0]*([3]*Gaus(x,[1],[2])/(sqrt(2*3.14159)*[2])+(1-[3])*Gaus(x,[1],[4])/(sqrt(2*3.14159)*[4]))",1.7,2.0);
+  TF1* mass = new TF1("mass","[0]*([3]*exp(-0.5*((x-[1])/[2])**2)/(sqrt(2*3.14159)*[2])+(1-[3])*exp(-0.5*((x-[1])/[2])**2)/(sqrt(2*3.14159)*[4]))",1.7,2.0);
   mass->SetParameters(f->GetParameter(0),f->GetParameter(1),f->GetParameter(2),f->GetParameter(7),f->GetParameter(8));
   mass->SetFillColor(kOrange-3);
   mass->SetFillStyle(3002);
