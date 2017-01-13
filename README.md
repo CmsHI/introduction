@@ -73,7 +73,7 @@ root [2] TBrowser b
 ```
 ![Image of TBrowser](http://web.mit.edu/mithig/tutorial/tbrowser-example.png)
 
-Here we see the differnt leaf types inside the tree, which each stores some type of information about the event. While the specific leaves shown here are arbitrarily chosen and will vary from experiments and analyses, the same general concepts apply so let's go through some of them in detail to get a better understanding of what type of collision data there is and how it's stored.
+Here we see the different leaf types inside the tree, which each stores some type of information about the event. While the specific leaves shown here are arbitrarily chosen and will vary from experiments and analyses, the same general concepts apply so let's go through some of them in detail to get a better understanding of what type of collision data there is and how it's stored.
 
 ## Global event variables
 Each collision will have some global properties that can be represented by a single number or boolean in the tree. Some examples of this are shown below:
@@ -162,7 +162,7 @@ Info in <TTreePlayer::MakeClass>: Files: analysis.h and analysis.C generated fro
 root [2]
 ```
 
-ROOT created two files for us, analysis.h and analysis.C , which we can start from to analyze the data in the root flie. The code in analysis.h is what makes reads in the root file and sets the variables, we can treat this as a black box for now but feel free to try to understand what it does and ask questions about what is happening under the hood. 
+ROOT created two files for us, analysis.h and analysis.C , which we can start from to analyze the data in the root file. The code in analysis.h is what makes reads in the root file and sets the variables, we can treat this as a black box for now but feel free to try to understand what it does and ask questions about what is happening under the hood. 
 
 The first thing we'll do is modify the analysis.C so that we can compile it into an executable. All we need to add is a main() function to satisfy the compiler. So add the following lines to the end of analysis.C :
 
@@ -210,7 +210,7 @@ The code still hasn't produced any output, however this time it actually read in
 
 To understand this code you should be familiar with _for_ loops and _if_ statements . The line ```Long64_t ientry = fChain->GetEntry(jentry);``` is what loads the jentry'th collision into memory. The way the TTree data structures work in this code is the following, we have the same variables described above, ex. nTrk and trkPt, set _for a specific collision_ . When you call ```GetEntry(0)``` it sets the nTrk variable to the number for the first collision, it sets the trkPt array to the momentum of the particles in that collision, and so fourth. When you call ```GetEntry(1)``` , it changes the values of all the variables to what they are in the second collision, and so on. 
 
-Try to understand how collisions are stored in TTrees here, how we pull all the information one collision event at a time, and how you don't see what's happening in all collisions simulataneously. 
+Try to understand how collisions are stored in TTrees here, how we pull all the information one collision event at a time, and how you don't see what's happening in all collisions simultaneously. 
 
 Let's make the same plot we did with the TTree::Draw command further up, ```ztree->Draw("trkPt","trkPt<10 && nTrk>20")```, to understand how cuts can be applied when looping through events and looping through tracks. 
 
