@@ -1,3 +1,19 @@
+**Table of Contents** 
+
+- [Introduction](#)
+	- [Install ROOT:](#)
+	- [Running ROOT:](#)
+	- [Looking inside a Data file](#)
+		- [Global event variables](#)
+		- [Information about charged particles](#)
+		- [Information about photons](#)
+		- [Information about jets](#)
+	- [Making quick plots from ROOT](#)
+	- [Analysis code with ROOT](#)
+	- [Homework](#)
+		- [Physics:](#)
+		- [Programming:](#)
+
 # Introduction
 Getting started with particle physics research and ROOT. 
 
