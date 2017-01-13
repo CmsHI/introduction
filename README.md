@@ -1,4 +1,4 @@
-**Table of Contents** 
+Getting started with particle physics research and ROOT. 
 
 - [Introduction](#)
 	- [Install ROOT:](#)
@@ -14,10 +14,7 @@
 		- [Physics:](#)
 		- [Programming:](#)
 
-# Introduction
-Getting started with particle physics research and ROOT. 
-
-## Install ROOT: 
+# Install ROOT: 
 Under "Latest ROOT Releases" download the latest "Pro" release, for this example 6.08/02 2016-12-02, https://root.cern.ch/content/release-60802
 Ex: for Ubuntu: https://root.cern.ch/download/root_v6.08.02.Linux-ubuntu16-x86_64-gcc5.4.tar.gz
 
@@ -33,7 +30,7 @@ source ~/root/bin/thisroot.sh
 ```
 Add that line to your ~/.bashrc or ~/.bash_profile file so that it's always executed when you start the terminal and you can always use root. 
 
-## Running ROOT:
+# Running ROOT:
 To run root just type root from the command line. 
 ```bash
 root
@@ -55,7 +52,7 @@ This means root works and you can issue commands to the root interpreter line by
 root [0] .q
 ```
 
-##  Looking inside a Data file
+#  Looking inside a Data file
 Let's grab a sample input file of real collision data and open it in ROOT, and use this to go over some of the ways we can use the root interpreter. 
 ```bash
 wget http://web.mit.edu/mithig/samples/g.pp-photonHLTFilter-v0-HiForest-tutorial.root
@@ -79,7 +76,7 @@ root [2] TBrowser b
 
 Here we see the differnt leaf types inside the tree, which each stores some type of information about the event. While the specific leaves shown here are arbitrarily chosen and will vary from experiments and analyses, the same general concepts apply so let's go through some of them in detail to get a better understanding of what type of collision data there is and how it's stored.
 
-### Global event variables
+## Global event variables
 Each collision will have some global properties that can be represented by a single number or boolean in the tree. Some examples of this are shown below:
 ```
 isPP              = type int , 0 if PbPb collision data, 1 if pp 
@@ -87,7 +84,7 @@ run, event, lumi  = a set of numbers making describing when the event was record
 vz                = the z possition of the collision along the beampipe, with 0 being the center of the detector
 ```
 
-### Information about charged particles
+## Information about charged particles
 Many colliders, CMS included, detect charged particles with high precision by using a detector called a tracker, where the charged particles deposit energy in points as they traverse, and then algorithms reconstruct the trajectories of individual particles from these points and we can extract information like momentum and the charge of the particle by how it bends in a known magnetic field. We call these reconstructed trajectories tracks, and since there can be many charged particles produced in a single collision, we store the information about tracks as arrays indexed by which track we are looking at. The variables are described below:
 ```
 nTrk              = the total number of reconstructed charged particles, this is a single integer for each collision
@@ -98,7 +95,7 @@ trkCharge[i]      = the charge of the i'th particle, since we can only reconstru
 trkWeight[i]      = the correction factor to be applied to the i'th track to account for efficiency and mis-reconstruction 
 ```
 
-### Information about photons
+## Information about photons
 Photons are reconstructed using the electromagnetic calorimeter in the detector. Like charged particles, there can be multiple photons per collision so we store photon related variables as arrays as well. 
 ```
 nPho              = the number of reconstructed photons, a single integer for each collision
@@ -109,7 +106,7 @@ phoEta[i]         = the pseudorapidity of the i'th photon
 phoPhi[i]         = the azimuthal angle of the i'th photon
 ```
 
-### Information about jets
+## Information about jets
 Nature prevents quarks and gluons to exist in a deconfined state that reaches our detector, instead quarks and gluons with high enough momentum will produce lots of particles around themselves and appear in a detector as a collimated spray of particles, which we call a jet. Due to energy and momentum conservation we know that the sum of the total energy and momentum of all the particles in the jet must equal the initial energy and momentum of the quark or gluon the jet originated from. However we don't know for sure which particles are part of the jet and which don't, so we rely on algorithms to both decide and define what is measured as a "jet" . While jets occur more rarely than charged particles, there can still be multiple jets per collision so we also store jet related variables in arrays.
 ```
 njet              = the number of reconstructed jets, a single integer for each collision
@@ -121,7 +118,7 @@ jetphi[i]         = the azimuthal angle of the i'th jet
 
 While the names and types of variables you'll encounter in data will be different than these, there idea that certain variables describe a collision, and other variables describe objects within that collision is a general concept. 
 
-## Making quick plots from ROOT
+# Making quick plots from ROOT
 Open the file described above and the TBrowser until you get to the same image as shown above. If you just double click on the variable called nTrk you should see an image like the one below, this shows us the distribution of the number of charged particle per collision, for all collisions in the file that we opened. Try right clicking on the plot and changing the y-axis to log scale and discover what other tools are available to us for manipulating plots. 
 ![Image of TBrowser](http://web.mit.edu/mithig/tutorial/nTrk-example.png)
 
@@ -152,7 +149,7 @@ root [8] TTree::Draw(
 You see that the Draw command can take up to 5 arguments but only the first is required, the rest being optional. You can do surprisingly many things from just carefully crafted Draw commands. Try to see if you can plot the difference in the phi coordinate of the first photon (index 0 in the array) and all the charged particles in each event, with the result plotted between 0 and pi (since the largest angle between two vectors is pi).
 
 
-## Analysis code with ROOT
+# Analysis code with ROOT
 While analyzing data line by line with Draw commands from the ROOT terminal can get you pretty far, there is a limit to what you can achieve. At some point it's necessary to write code that can do arbitrarily complex logic and cuts. There's quite a few concepts and code that needs to be written to analyze a root file from scratch, however here we're going to take a shortcut and have ROOT auto-generate that for us. At some point it's useful to understand how that works as well but for now we can just use it as a black box that lets us use variables from the file in the code. So to generate the code we open the root file again and use ```ztree->MakeClass``` function:
 
 ```
@@ -315,15 +312,15 @@ root [3]
 
 How does this histogram compare to the one created by the Draw command from before? 
 
-## Homework
+# Homework
 
 Try to do some of the following tasks which are useful for research both in this group and elsewhere.
 
-### Physics: 
+## Physics: 
 1. Modify the code we have so far to produce a histogram of the average track momentum distribution that you would see in a typical collision that has at least 20 particles. This is a physically meaningful observable, so it should not depend on any arbitrary decisions we make like the number of events that are in the file or the choice of binning for the histogram.  
 2. Create a new histogram that shows how the mean value of the track momentum (mean of trkPt) changes as a function of the number of tracks in the event. 
 
-### Programming: 
+## Programming: 
 1. Modify the code we wrote so that the cuts we made are not hard-coded in analysis.C , but can be passed in as arguments when we run the code from the terminal. I.e. running ```./analysis.exe 20 10``` will apply ```nTrk>20``` and ```trkPt<10``` cuts , and changing those cuts just requires changing the parameters you run with, ```./analysis.exe 30 30``` for example. 
 2. Start using github if you haven't already. Make an account, set up your ssh keys so you can push and pull, fork this repository and start committing and saving your changes. 
 
