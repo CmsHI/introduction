@@ -88,7 +88,7 @@ Here we see the different leaf types inside the tree, which each stores some typ
 Each collision will have some global properties that can be represented by a single number or boolean in the tree. Some examples of this are shown below:
 ```
 isPP              = type int , 0 if PbPb collision data, 1 if pp 
-run, event, lumi  = a set of numbers making describing when the event was recorded, the combination should be unique in data
+run, event, lumi  = a set of numbers describing when the event was recorded, the combination should be unique in data
 vz                = the z possition of the collision along the beampipe, with 0 being the center of the detector
 ```
 
