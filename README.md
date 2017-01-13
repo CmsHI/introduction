@@ -1,18 +1,17 @@
-Getting started with particle physics research and ROOT. 
+A tutorial for getting started with particle physics research and ROOT. 
 
-- [Introduction](#)
-	- [Install ROOT:](#)
-	- [Running ROOT:](#)
-	- [Looking inside a Data file](#)
-		- [Global event variables](#)
-		- [Information about charged particles](#)
-		- [Information about photons](#)
-		- [Information about jets](#)
-	- [Making quick plots from ROOT](#)
-	- [Analysis code with ROOT](#)
-	- [Homework](#)
-		- [Physics:](#)
-		- [Programming:](#)
+- [Install ROOT:](#)
+- [Running ROOT:](#)
+- [Looking inside a Data file](#)
+	- [Global event variables](#)
+	- [Information about charged particles](#)
+	- [Information about photons](#)
+	- [Information about jets](#)
+- [Making quick plots from ROOT](#)
+- [Analysis code with ROOT](#)
+- [Homework](#)
+	- [Physics:](#)
+	- [Programming:](#)
 
 # Install ROOT: 
 Under "Latest ROOT Releases" download the latest "Pro" release, for this example 6.08/02 2016-12-02, https://root.cern.ch/content/release-60802
