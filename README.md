@@ -320,6 +320,30 @@ root [3]
 
 How does this histogram compare to the one created by the Draw command from before? 
 
+# Finding the D meson
+This part of the tutorial shows how to fit an invariant mass histogram to measure a particle that doesn't interact direcly with the detector, but decays into particles that we directly measure. First let's run the code. 
+```bash
+cd exampleDmeson
+. run_macros.sh
+```
+If you look inside run_macros.sh you'll see it looks for an input file and downloads it if it doesn't exist. Then it runs two macros in root, ```savehist.C``` and ```fitD.C``` . 
+```bash
+root -b -q "savehist.C+("\"$INPUTDATA\",\"$CUTTRIGGER\",\"$CUT\",\"$OUTPUT\"")"
+
+root -b -q "fitD.C+("\"$OUTPUT\"")"
+```
+This is another way to run C++ code using root, instead of getting g++ to directly compile the code and then running it, here root compiles the code (the C+ option after the filename does this) and runs it all in one go. The options "-b -q" to root tell it to run in batch mode and quit after running. Whether to compile your code with g++ or root is up to personal preference. The first output this code produces is an invariant mass spectrum. This invariant mass is calculated by taking the sum of momentum 4-vectors for a pair (or more) particles, then calculating the length of that resultant four vector (e^2-p^2). For a random pair of particles calculating the invariant mass in this way will result in a random number, however if the pair of particles happens to be from the same parent particle that decayed, like a D meson, then the value of the invariant mass will be exactly the rest mass of the particle they decayed from. The image below is from taking many pairs of particles and calculating the invariant mass in this way. 
+
+![Invariant mass spectrum](http://web.mit.edu/mithig/tutorial/massSpectra.png)
+
+We see there is a pedestal coming from picking pair of unrelated particles, and on top of that there is a gaussian-like distribution from when the particles we pick happen to both come from the same D meson decay. In order to count the total number of D mesons we measure in this way we need to take the integral of the region under the peak and subtract from it the combinatorial background from pairs of particles that are unrelated but by chance their invariant mass lies under the peak. 
+
+Here ```fitD.C``` takes the above distribution as input, defines a functional form that can describe the shape of the full distribution:
+```c++
+TF1* f = new TF1("f","[0]*([7]*exp(-0.5*((x-[1])/[2])**2)/(sqrt(2*3.14159)*[2])+(1-[7])*exp(-0.5*((x-[1])/[8])**2)/(sqrt(2*3.14159)*[8]))+[3]+[4]*x+[5]*x*x+[6]*x*x*x",1.7,2.0);
+```
+Then guesses some parameters for this function and tells root to fit the function to the histogram by tweaking the parameters until the fit can't get any better. This is a great example of the usefulness of ROOT, since writing a arbitrary function fitter to histograms is a lot of work that ROOT already did for us. Since the function we have fit is a sum of a component which describes the combinatorial background and another component which describes the peak, we can now evaluate how much of the region under the peak comes from D meson decays. Open the output file ```plots/fitD.pdf``` to see the result that with the D and background decomposed. Another thing to learn from this macro is how to use the different plotting tools in ROOT, you can see how to manipulate the axis titles, make a plot legend, and making a professional looking plot. 
+
 # Homework
 
 Try to do some of the following tasks which are useful for research both in this group and elsewhere.
