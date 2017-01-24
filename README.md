@@ -31,6 +31,12 @@ source ~/root/bin/thisroot.sh
 ```
 Add that line to your ~/.bashrc or ~/.bash_profile file so that it's always executed when you start the terminal and you can always use root. 
 
+To install ROOT on Windows you need to first install bash for Windows: http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/ , then you need to install the root prerequisites within bash, 
+```bash
+sudo apt-get install git dpkg-dev cmake g++ gcc binutils libx11-dev libxpm-dev libxft-dev libxext-dev
+```
+Then install Xming and add ```export DISPLAY=:0``` to your ```.bashrc``` file to see be able to see plots and graphics. After this the steps are the same as above for Ubuntu. 
+
 # Running ROOT:
 To run root just type root from the command line. 
 ```bash
